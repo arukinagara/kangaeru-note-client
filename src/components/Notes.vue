@@ -94,9 +94,9 @@
               Some quick example text to build on the card title and make up
               the bulk of the card's content.
             </p>
-            <a href="#" class="card-link">仮説へ</a>
-            <a href="#" class="card-link">変更</a>
-            <a href="#" class="card-link">削除</a>
+            <a href="#" class="card-link text-muted">仮説へ</a>
+            <a href="#" class="card-link text-muted">変更</a>
+            <a href="#" class="card-link text-muted">削除</a>
           </div>
         </div>
         <div class="card w-75 mb-2 offset-md-1">
@@ -106,9 +106,9 @@
               Some quick example text to build on the card title and make up
               the bulk of the card's content.
             </p>
-            <a href="#" class="card-link">実験へ</a>
-            <a href="#" class="card-link">変更</a>
-            <a href="#" class="card-link">削除</a>
+            <a href="#" class="card-link text-muted">実験へ</a>
+            <a href="#" class="card-link text-muted">変更</a>
+            <a href="#" class="card-link text-muted">削除</a>
           </div>
         </div>
         <div class="card w-75 mb-2 offset-md-2">
@@ -118,9 +118,9 @@
               Some quick example text to build on the card title and make up
               the bulk of the card's content.
             </p>
-            <a href="#" class="card-link">考察へ</a>
-            <a href="#" class="card-link">変更</a>
-            <a href="#" class="card-link">削除</a>
+            <a href="#" class="card-link text-muted">考察へ</a>
+            <a href="#" class="card-link text-muted">変更</a>
+            <a href="#" class="card-link text-muted">削除</a>
           </div>
         </div>
         <div class="card w-75 offset-md-3">
@@ -130,8 +130,8 @@
               Some quick example text to build on the card title and make up
               the bulk of the card's content.
             </p>
-            <a href="#" class="card-link">変更</a>
-            <a href="#" class="card-link">削除</a>
+            <a href="#" class="card-link text-muted">変更</a>
+            <a href="#" class="card-link text-muted">削除</a>
           </div>
         </div>
       </div>
