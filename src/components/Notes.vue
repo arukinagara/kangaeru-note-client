@@ -166,6 +166,17 @@
                   @click="$bvModal.hide('about-modal')">わかりました</b-button>
       </div>
     </b-modal>
+    <b-modal ref="noticeModal" id="notice-modal" hide-header hide-footer>
+      <div class="m-3">
+        <p>
+          {{ this.noticeForm.message }}
+        </p>
+        <b-button type="button"
+                  variant="outline-secondary"
+                  class="btn-sm mt-2"
+                  @click="$bvModal.hide('notice-modal')">わかりました</b-button>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -193,17 +204,23 @@ export default {
         id: '',
         kind: '',
       },
+      noticeForm: {
+        message: '',
+      },
       rootNotes: [],
       selectedNotes: [],
+      axiosInterceptor: null,
     };
   },
   mounted() {
+    document.title = '考えるノート';
     if (localStorage.accessToken) {
       this.accessToken = localStorage.accessToken;
     }
     if (localStorage.refreshToken) {
       this.refreshToken = localStorage.refreshToken;
     }
+    this.enableInterceptor();
   },
   watch: {
     accessToken(value) {
@@ -285,6 +302,24 @@ export default {
           console.log(error);
         });
     },
+    refreshAuthentication() {
+      return new Promise((resolve) => {
+        const path = 'http://localhost:5000/auth/refresh';
+        axios.post(path, '', {
+          headers: {
+            Authorization: `Bearer ${this.refreshToken}`,
+          },
+        })
+          .then((response) => {
+            this.accessToken = response.data.access_token;
+            resolve(response.data.access_token);
+          })
+          .catch((error) => {
+            // eslint-disable-next-line
+            console.log(error);
+          });
+      });
+    },
     indexRootNotes() {
       const path = 'http://localhost:5000/?kind=1';
       axios.get(path, {
@@ -301,7 +336,7 @@ export default {
         });
     },
     indexSelectedNotes(rootNoteId) {
-      const path = 'http://localhost:5000/?kind=1';
+      const path = 'http://localhost:5000/';
       axios.get(path, {
         headers: {
           Authorization: `Bearer ${this.accessToken}`,
@@ -383,6 +418,48 @@ export default {
           console.log(error);
         });
     },
+    // エラー監視と再認証
+    enableInterceptor() {
+      // eslint-disable-next-line
+      this.axiosInterceptor = axios.interceptors.response.use((response) => {
+        return response;
+      }, (error) => {
+        if (error.response.status !== 401) {
+          this.noticeForm.message = 'おや？何かがおかしいようです。'
+                                  + 'ブラウザのJavaScriptコンソールを開いてエラー内容を確認し、'
+                                  + 'このアプリケーションを作った人に教えてください。';
+          this.$bvModal.show('notice-modal');
+          return new Promise((resolve, reject) => {
+            reject(error);
+          });
+        }
+
+        if (error.config.url === '/auth/refresh' || !this.loggedIn) {
+          this.noticeForm.message = 'ユーザ名/パスワードが誤っているか、認証トークンの有効期限が切れています。'
+                                  + 'もう一度ログインしてみてください。';
+          this.$bvModal.show('notice-modal');
+          return new Promise((resolve, reject) => {
+            reject(error);
+          });
+        }
+
+        return this.refreshAuthentication()
+          .then(() => {
+            const config = error.config;
+            config.headers['Authorization'] = `Bearer ${this.accessToken}`;
+
+            return new Promise((resolve, reject) => {
+              axios.request(config).then(response => {
+                resolve(response);
+              }).catch((error) => {
+                reject(error);
+              });
+            });
+          }).catch((error) => {
+            return error;
+          });
+      });
+    },
     // 内部メソッド
     setNoteModalTitle(kind) {
       switch (kind) {
@@ -449,6 +526,7 @@ export default {
       this.noteForm.sentence = '';
       this.confirmForm.id = '';
       this.confirmForm.kind = '';
+      this.noticeForm.message = '';
     },
   },
 };
