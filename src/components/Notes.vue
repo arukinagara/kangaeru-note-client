@@ -10,7 +10,8 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav mr-auto"/>
           <div class="navbar-nav">
-            <button class="btn btn-link nav-item nav-link mr-2"
+            <button type="button"
+                    class="btn btn-outline-secondary btn-sm mr-2"
                     v-b-modal.about-modal>使い方</button>
             <button type="button"
                     class="btn btn-outline-secondary btn-sm float-right"
@@ -158,7 +159,7 @@
           自ら課題を見つけ、観察し、仮説を立て、実験し、その結果をもとに考えるという<strong>科学の考え方</strong>をサポートできるような、メモ型のWebアプリケーションです。
         </p>
         <p>
-          まだ何もノートを作っていないのであれば、画面左上の＋ボタンからノートを作って観察結果をまとめてみましょう。
+          まだ何もノートを作っていないのであれば、画面左の＋ボタンからノートを作って観察結果をまとめてみましょう。
         </p>
         <b-button type="button"
                   variant="outline-secondary"
