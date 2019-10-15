@@ -322,7 +322,7 @@ export default {
       });
     },
     indexRootNotes() {
-      const path = 'http://localhost:5000/?kind=1';
+      const path = 'http://localhost:5000/notes?kind=1';
       axios.get(path, {
         headers: {
           Authorization: `Bearer ${this.accessToken}`,
@@ -337,7 +337,7 @@ export default {
         });
     },
     indexSelectedNotes(rootNoteId) {
-      const path = 'http://localhost:5000/';
+      const path = 'http://localhost:5000/notes';
       axios.get(path, {
         headers: {
           Authorization: `Bearer ${this.accessToken}`,
@@ -355,7 +355,7 @@ export default {
         });
     },
     createNote(payload) {
-      const path = 'http://localhost:5000/';
+      const path = 'http://localhost:5000/notes';
       axios.post(path, payload, {
         headers: {
           Authorization: `Bearer ${this.accessToken}`,
@@ -379,7 +379,7 @@ export default {
         });
     },
     updateNote(payload) {
-      const path = 'http://localhost:5000/';
+      const path = 'http://localhost:5000/notes';
       axios.put(path, payload, {
         headers: {
           Authorization: `Bearer ${this.accessToken}`,
@@ -397,7 +397,7 @@ export default {
         });
     },
     destroyNote() {
-      const path = 'http://localhost:5000/';
+      const path = 'http://localhost:5000/notes';
       axios.delete(path, {
         headers: {
           Authorization: `Bearer ${this.accessToken}`,
