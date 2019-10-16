@@ -17,10 +17,14 @@
                     class="btn btn-outline-secondary btn-sm float-right"
                     v-on:click="onClickLogoutButton"
                     v-if="loggedIn">ログアウト</button>
-            <button type="button"
-                    class="btn btn-outline-secondary btn-sm float-right"
-                    v-b-modal.login-modal
-                    v-else>ログイン</button>
+            <div v-else>
+              <button type="button"
+                      class="btn btn-outline-secondary btn-sm mr-2"
+                      v-on:click="onClickLoginButton(true)">登録</button>
+              <button type="button"
+                      class="btn btn-outline-secondary btn-sm float-right"
+                      v-on:click="onClickLoginButton(false)">ログイン</button>
+            </div>
           </div>
         </div>
       </div>
@@ -113,7 +117,7 @@
         </b-form-group>
         <b-button type="submit"
                   variant="outline-secondary"
-                  class="btn-sm mt-2">ログイン</b-button>
+                  class="btn-sm mt-2">{{this.loginForm.register ? '登録' : 'ログイン' }}</b-button>
       </b-form>
     </b-modal>
     <b-modal ref="noteModal" id="note-modal" size="lg" hide-header hide-footer>
@@ -193,6 +197,7 @@ export default {
       loginForm: {
         userName: '',
         password: '',
+        register: false,
       },
       noteForm: {
         title: '',
@@ -243,6 +248,10 @@ export default {
   },
   methods: {
     // 内部データの更新/モーダルの呼び出し
+    onClickLoginButton(register) {
+      this.loginForm.register = register;
+      this.$bvModal.show('login-modal');
+    },
     onClickLogoutButton() {
       this.initForm();
       this.loggedIn = false;
@@ -272,7 +281,11 @@ export default {
         username: this.loginForm.userName,
         password: this.loginForm.password,
       };
-      this.createAuthentication(payload);
+      if (this.loginForm.register) {
+        this.createUser(payload);
+      } else {
+        this.createAuthentication(payload);
+      }
     },
     onSubmitNoteModal(event) {
       event.preventDefault();
@@ -320,6 +333,17 @@ export default {
             console.log(error);
           });
       });
+    },
+    createUser(payload) {
+      const path = 'http://localhost:5000/auth/register';
+      axios.post(path, payload)
+        .then((response) => {
+          createAuthentication(payload);
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        });
     },
     indexRootNotes() {
       const path = 'http://localhost:5000/notes?kind=1';
@@ -520,6 +544,7 @@ export default {
     initForm() {
       this.loginForm.userName = '';
       this.loginForm.password = '';
+      this.loginForm.register = false;
       this.noteForm.title = '';
       this.noteForm.id = '';
       this.noteForm.rootNoteId = '';
