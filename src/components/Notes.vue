@@ -338,7 +338,7 @@ export default {
       const path = 'http://localhost:5000/auth/register';
       axios.post(path, payload)
         .then((response) => {
-          createAuthentication(payload);
+          this.createAuthentication(payload);
         })
         .catch((error) => {
           // eslint-disable-next-line
